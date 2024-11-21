@@ -1,41 +1,74 @@
-# Устанавливаем компилятор
+# Compiler settings
 CC = gcc
-
-# Устанавливаем флаги компилятора
 CFLAGS = -Wall -Wextra -g
+TARGET = nfetch
 
-# Указываем исполняемый файл
-TARGET = cfetch
+# Directories
+BINDIR = /bin/
+SRCDIR = .
+OBJDIR = build/
 
-# Указываем исходные файлы
-SRCS = main.c \
-       get_data/get_cpu.c \
-       get_data/gpu_info.c \
-       get_data/get_sys.c \
-       get_data/get_ram.c \
-       get_data/disk_info.c \
-	   get_data/uptime.c
+# Source files
+SRCS = $(wildcard $(SRCDIR)/get_data/*.c) $(SRCDIR)/main.c
+OBJS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 
-# Указываем объектные файлы
-OBJS = $(SRCS:.c=.o)
+# Version and color codes
+APPVER = 0.4.3
+RED=\033[0;31m
+GREEN=\033[0;32m
+YELLOW=\033[1;33m
+BLUE=\033[0;34m
+RESET=\033[0m
 
-# Правило по умолчанию
+# Default target
 all: $(TARGET)
+	@echo -e ""
+	@echo -e "${GREEN} [✓] - Complete"
+	@echo -e ""
+	@echo -e "${RED}"
+	@echo -e "   ▄   ▄████  ▄███▄     ▄▄▄▄▀ ▄█▄     ▄  █ "
+	@echo -e "    █  █▀   ▀ █▀   ▀ ▀▀▀ █    █▀ ▀▄  █   █ "
+	@echo -e "██   █ █▀▀    ██▄▄       █    █   ▀  ██▀▀█ "
+	@echo -e "█ █  █ █      █▄   ▄▀   █     █▄  ▄▀ █   █ "
+	@echo -e "█  █ █  █     ▀███▀    ▀      ▀███▀     █  "
+	@echo -e "█   ██   ▀                             ▀   "
+	@echo -e "                                           "
+	@echo -e "${YELLOW}          🗲 Created by Nighty3098"
+	@echo -e "${YELLOW}        https://nighty3098.github.io/"
 
-# Правило для сборки исполняемого файла
+# Link object files to create the executable
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
-# Правило для сборки объектных файлов
-%.o: %.c
+# Compile source files into object files
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(dir $@)  # Create the directory for the object file if it doesn't exist
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Правило для очистки скомпилированных файлов
+# Clean up object files and the executable
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(OBJDIR) $(TARGET)
+	@echo -e ""
+	@echo -e "${GREEN} [✓] - Complete"
+	@echo -e ""
+	@echo -e "${RED}"
+	@echo -e "   ▄   ▄████  ▄███▄     ▄▄▄▄▀ ▄█▄     ▄  █ "
+	@echo -e "    █  █▀   ▀ █▀   ▀ ▀▀▀ █    █▀ ▀▄  █   █ "
+	@echo -e "██   █ █▀▀    ██▄▄       █    █   ▀  ██▀▀█ "
+	@echo -e "█ █  █ █      █▄   ▄▀   █     █▄  ▄▀ █   █ "
+	@echo -e "█  █ █  █     ▀███▀    ▀      ▀███▀     █  "
+	@echo -e "█   ██   ▀                             ▀   "
+	@echo -e "                                           "
+	@echo -e "${YELLOW}          🗲 Created by Nighty3098"
+	@echo -e "${YELLOW}        https://nighty3098.github.io/"
 
-# Правило для запуска программы
-run: $(TARGET)
-	./$(TARGET)
-
-.PHONY: all clean run
+# Install the executable
+install:
+	@sudo cp $(TARGET) $(BINDIR)
+	@echo -e ""
+	@echo -e "${GREEN} [✓] - Complete"
+	@echo -e ""
+	@echo -e "${RED}"
+	@echo -e "   ▄   ▄████  ▄███▄     ▄▄▄▄▀ ▄█▄     ▄  █ "
+	@echo -e "    █  █▀   ▀ █▀   ▀ ▀▀▀ █    █▀ ▀▄  █   █ "
+	@echo -e "██   █
