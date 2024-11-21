@@ -8,3 +8,4 @@ src/cfetch
 src/main.o
 src/get_data/uptime.o
 art.txt
+src/build
