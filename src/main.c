@@ -62,41 +62,13 @@ char *create_repeated_string(char character, int count)
   return result;
 }
 
-void print_centered(const char *text)
-{
-  struct winsize w;
-  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-  int terminal_width = w.ws_col;
-
-  int text_length = strlen(text);
-  // printf("%i", text_length);
-  int padding = (terminal_width - text_length) / 2;
-  // int padding = 0;
-
-  for (int i = 0; i < padding; i++)
-  {
-    putchar(' ');
-  }
-  printf("%s\n", text);
-}
-
 void print_centered_squares()
 {
-  struct winsize w;
-  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-  int terminal_width = w.ws_col;
-
   const char *squares = WHITE_BG
-      "    " RESET_BG RED_BG "    " RESET_BG GREEN_BG "    " RESET_BG YELLOW_BG "    " RESET_BG BLUE_BG
-      "    " RESET_BG MAGENTA_BG "    " RESET_BG CYAN_BG "    " RESET_BG WHITE_BG "    " RESET_BG;
+      "    " RESET_BG RED_BG "    " RESET_BG GREEN_BG "    " RESET_BG YELLOW_BG
+      "    " RESET_BG BLUE_BG "    " RESET_BG MAGENTA_BG "    " RESET_BG CYAN_BG
+      "    " RESET_BG WHITE_BG "    " RESET_BG;
 
-  int squares_length = 5 * 8;
-  int padding = (terminal_width - squares_length) / 2;
-
-  for (int i = 0; i < padding; i++)
-  {
-    putchar(' ');
-  }
   printf("%s\n", squares);
 }
 
@@ -180,9 +152,9 @@ void print_info(const char *label, const char *value, int *max_width)
     {
       color = RESET;
     }
-    snprintf(buffer, sizeof(buffer), "%s%s%-8s " WHITE " %s %s%s%s", color,
+    snprintf(buffer, sizeof(buffer), "%s%s%-10s " WHITE " %s %s%s%s", color,
              icon, label, WHITE, spacer, value, RESET);
-    print_centered(buffer);
+    printf("%s\n", buffer);
 
     int current_width = strlen(buffer);
 
@@ -242,7 +214,8 @@ void print_usage(const char *program_name, int *max_width)
   printf("▐███▌██▌.▐█▄▄▌ ▐█▌·▐███▌██▌▐▀\n");
   printf("·▀▀▀ ▀▀▀  ▀▀▀  ▀▀▀ ·▀▀▀ ▀▀▀ ·\n\n");
 
-  printf(GREEN "Usage:\n\n--cpu\n--ram\n--gpu\n--disk\n--host\n--kernel\n--os\n--shell\n--uptime\n--colors\n--wm");
+  printf(GREEN "Usage:\n\n--cpu\n--ram\n--gpu\n--disk\n--host\n--kernel\n--"
+               "os\n--shell\n--uptime\n--colors\n--wm");
 }
 
 void print_os(int *max_width)
@@ -263,8 +236,7 @@ void print_os(int *max_width)
   {
     if (strncmp(line, "PRETTY_NAME=", 12) == 0)
     {
-      snprintf(os_name, sizeof(os_name), "%s",
-               line + 13);
+      snprintf(os_name, sizeof(os_name), "%s", line + 13);
       os_name[strcspn(os_name, "\"")] = '\0';
       break;
     }
@@ -276,29 +248,9 @@ void print_os(int *max_width)
   print_info("OS", os_name, max_width);
 }
 
-void print_art(int *max_width)
-{
-  const char *linux_logo_1 = RED_BG "    ,___  " RESET_BG;
-  const char *linux_logo_2 = RED_BG "   _| ()\\\ " RESET_BG;
-  const char *linux_logo_3 = RED_BG " /    --' " RESET_BG;
-  const char *linux_logo_4 = RED_BG " \\\ __^/   " RESET_BG;
-
-  print_centered("\n");
-  print_centered(linux_logo_1);
-  print_centered(linux_logo_2);
-  print_centered(linux_logo_3);
-  print_centered(linux_logo_4);
-}
-
 int main(int argc, char *argv[])
 {
   clear_terminal();
-
-  struct winsize w;
-  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-  int terminal_width = w.ws_col;
-  int terminal_height = w.ws_row;
-  int text_height = 0;
 
   CPUInfo cpu_info = get_cpu_info();
   SystemInfo sys_info = get_system_info();
@@ -312,59 +264,47 @@ int main(int argc, char *argv[])
   int flags[12] = {0};
   int max_width = 0;
 
-  int output_lines = 0;
-
   for (int i = 1; i < argc; i++)
   {
     if (strcmp(argv[i], "--cpu") == 0)
     {
       flags[0] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--ram") == 0)
     {
       flags[1] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--gpu") == 0)
     {
       flags[2] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--disk") == 0)
     {
       flags[3] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--host") == 0)
     {
       flags[4] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--kernel") == 0)
     {
       flags[5] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--os") == 0)
     {
       flags[6] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--shell") == 0)
     {
       flags[7] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--help") == 0)
     {
       flags[8] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--uptime") == 0)
     {
       flags[9] = 1;
-      output_lines++;
     }
     else if (strcmp(argv[i], "--colors") == 0)
     {
@@ -373,20 +313,7 @@ int main(int argc, char *argv[])
     else if (strcmp(argv[i], "--wm") == 0)
     {
       flags[11] = 1;
-      output_lines++;
     }
-  }
-
-  if (output_lines == 0)
-  {
-    output_lines = 5;
-  }
-
-  int empty_lines = (terminal_height - output_lines) / 2;
-
-  for (int i = 0; i < empty_lines; i++)
-  {
-    printf("\n");
   }
 
   printf("╭─────────────────╮\n");
@@ -434,7 +361,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  wait_for_keypress();
+  // wait_for_keypress();
 
   return 0;
 }
