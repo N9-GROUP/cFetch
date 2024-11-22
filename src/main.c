@@ -408,14 +408,14 @@ int main(int argc, char *argv[])
       print_uptime_info(uptime, &max_width);
     if (flags[8])
       print_usage(argv[0], &max_width);
-    if (flags[10])
-    {
-      print_centered_squares();
-    }
     if (flags[11])
       print_window_manager(&max_width);
     if (flags[12])
       print_info("Hi,", get_current_username(), &max_width);
+    if (flags[10])
+    {
+      print_centered_squares();
+    }
   }
 
   wait_for_keypress();
