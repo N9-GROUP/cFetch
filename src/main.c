@@ -10,6 +10,7 @@
 #include "get_data/get_sys.h"
 #include "get_data/gpu_info.h"
 #include "get_data/uptime.h"
+#include "get_data/user_name.h"
 
 #define RESET_BG "\033[0m"
 #define BLACK_BG "\033[40m"
@@ -86,7 +87,7 @@ void print_centered_squares()
   int width = w.ws_col;
   int offset = (width - padding) / 2;
 
-  printf("%*s%s\n", offset, "", squares);
+  printf("\n%*s%s\n", offset, "", squares);
 }
 
 void print_info(const char *label, const char *value, int *max_width)
@@ -117,52 +118,52 @@ void print_info(const char *label, const char *value, int *max_width)
     if (strstr(label, "CPU"))
     {
       color = MAGENTA;
-      icon = "  ";
+      icon = " ";
     }
     else if (strstr(label, "RAM"))
     {
       color = MAGENTA;
-      icon = "󰍛  ";
+      icon = "󰍛 ";
     }
     else if (strstr(label, "Disk"))
     {
       color = MAGENTA;
-      icon = "  ";
+      icon = " ";
     }
     else if (strstr(label, "Kernel"))
     {
       color = MAGENTA;
-      icon = "  ";
+      icon = " ";
     }
     else if (strstr(label, "GPU"))
     {
       color = MAGENTA;
-      icon = "  ";
+      icon = " ";
     }
     else if (strstr(label, "Uptime"))
     {
       color = MAGENTA;
-      icon = "  ";
+      icon = " ";
     }
     else if (strstr(label, "OS"))
     {
       color = MAGENTA;
-      icon = "  ";
+      icon = " ";
     }
     else if (strstr(label, "Host"))
     {
       color = MAGENTA;
-      icon = "󰏔  ";
+      icon = "󰏔 ";
     }
     else if (strstr(label, "Shell"))
     {
       color = MAGENTA;
-      icon = "  ";
+      icon = " ";
     }
     else if (strstr(label, "WM"))
     {
       color = MAGENTA;
-      icon = "  ";
+      icon = " ";
     }
     else
     {
@@ -238,7 +239,7 @@ void print_usage(const char *program_name, int *max_width)
   printf("█   ██   ▀                             ▀   \n");
   printf("                                           \n");
   printf(YELLOW "Usage:\n\n--cpu --ram --gpu --disk --host --kernel --"
-                "os --shell --uptime --colors --wm\n");
+                "os --shell --uptime --colors --wm --user\n");
 }
 
 void print_os(int *max_width)
@@ -289,7 +290,7 @@ int main(int argc, char *argv[])
   int used_memory = get_memory_usage();
   int full_memory = get_memory_total();
 
-  int flags[12] = {0};
+  int flags[13] = {0};
   int max_width = 0;
   int output_lines = 0;
 
@@ -354,6 +355,11 @@ int main(int argc, char *argv[])
       flags[11] = 1;
       output_lines++;
     }
+    else if (strcmp(argv[i], "--user") == 0)
+    {
+      flags[12] = 1;
+      output_lines++;
+    }
   }
 
   if (output_lines == 0)
@@ -370,8 +376,9 @@ int main(int argc, char *argv[])
 
   if (!flags[0] && !flags[1] && !flags[2] && !flags[3] && !flags[4] &&
       !flags[5] && !flags[6] && !flags[7] && !flags[8] && !flags[9] &&
-      !flags[10] && !flags[11])
+      !flags[10] && !flags[11] && !flags[12])
   {
+    // print_info("Hi,", get_current_username(), &max_width);
     print_info("Kernel", sys_info.kernel, &max_width);
     print_info("Hostname", sys_info.device_name, &max_width);
     print_window_manager(&max_width);
@@ -401,13 +408,17 @@ int main(int argc, char *argv[])
       print_uptime_info(uptime, &max_width);
     if (flags[8])
       print_usage(argv[0], &max_width);
-    if (flags[11])
-      print_window_manager(&max_width);
     if (flags[10])
     {
       print_centered_squares();
     }
+    if (flags[11])
+      print_window_manager(&max_width);
+    if (flags[12])
+      print_info("Hi,", get_current_username(), &max_width);
   }
+
+  wait_for_keypress();
 
   return 0;
 }

@@ -58,6 +58,7 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "disk_info.h": "c",
-    "functional": "c"
+    "functional": "c",
+    "user_name.h": "c"
   }
 }
