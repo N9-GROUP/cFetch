@@ -64,11 +64,17 @@ clean:
 
 # Install the executable
 install:
-	@sudo cp $(TARGET) $(BINDIR)
+	sudo cp $(TARGET) $(BINDIR)
 	@echo -e ""
 	@echo -e "${GREEN} [✓] - Complete"
 	@echo -e ""
 	@echo -e "${RED}"
 	@echo -e "   ▄   ▄████  ▄███▄     ▄▄▄▄▀ ▄█▄     ▄  █ "
 	@echo -e "    █  █▀   ▀ █▀   ▀ ▀▀▀ █    █▀ ▀▄  █   █ "
-	@echo -e "██   █
+	@echo -e "██   █ █▀▀    ██▄▄       █    █   ▀  ██▀▀█ "
+	@echo -e "█ █  █ █      █▄   ▄▀   █     █▄  ▄▀ █   █ "
+	@echo -e "█  █ █  █     ▀███▀    ▀      ▀███▀     █  "
+	@echo -e "█   ██   ▀                             ▀   "
+	@echo -e "                                           "
+	@echo -e "${YELLOW}          🗲 Created by Nighty3098"
+	@echo -e "${YELLOW}        https://nighty3098.github.io/"
