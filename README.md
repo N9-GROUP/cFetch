@@ -32,4 +32,6 @@ nfetch
     <img src="imgs/1.png" />
     <br>
     <img src="imgs/3.png" />
+    <br>
+    <img src="imgs/4.png" />
 </div>
