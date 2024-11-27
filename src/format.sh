@@ -1,11 +1,15 @@
 #!/bin/bash
 
-if ! command -v clang-format &> /dev/null
-then
-    echo "clang-format not installed. Please install clang-format and try again."
-    exit 1
+project_dir="$1"
+
+if [ -z "$project_dir" ]; then
+  echo "Error: project directory is not specified."
+  exit 1
 fi
 
-find . -type f \( -iname "*.c" -o -iname "*.h" \) -exec clang-format -style=file -i -fallback-style=none {} +
+find "$project_dir" -name "*.c" -print0 | while IFS= read -r -d $'\0' file; do
+  clang-format -i "$file"
+  echo "🚀 File formatted successfully: $file"
+done
 
-echo "🚀 Formatted all C files."
+echo "Formatted all C files in $project_dir"
