@@ -10,12 +10,12 @@ typedef struct {
 int get_disk_info(const char *path, disk_info_t *info) {
   struct statvfs stat;
   if (statvfs(path, &stat) != 0) {
-    return 1; // Ошибка при получении информации о диске
+    return 1;
   }
 
   info->total_space = (unsigned long long)stat.f_blocks * stat.f_frsize;
   info->used_space =
       (unsigned long long)(stat.f_blocks - stat.f_bfree) * stat.f_frsize;
 
-  return 0; // Успешное получение информации о диске
+  return 0;
 }

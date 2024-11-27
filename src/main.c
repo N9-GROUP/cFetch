@@ -42,6 +42,11 @@ void wait_for_keypress() {
 #endif
 }
 
+void reset_term() {
+  printf("\033[?1049l");
+  printf("\033[?25h");
+}
+
 void clear_terminal() {
 #ifdef _WIN32
   system("cls");
@@ -244,107 +249,65 @@ int main(int argc, char *argv[]) {
   const char *gpu_model = get_gpu_model();
   disk_info_t info;
   uptime_t uptime = get_uptime();
-
   int used_memory = get_memory_usage();
   int full_memory = get_memory_total();
 
-  int flags[13] = {0};
   int max_width = 0;
   int output_lines = 0;
+  int empty_lines = 0;
 
-  for (int i = 1; i < argc; i++) {
-    if (strcmp(argv[i], "--cpu") == 0) {
-      flags[0] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--ram") == 0) {
-      flags[1] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--gpu") == 0) {
-      flags[2] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--disk") == 0) {
-      flags[3] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--host") == 0) {
-      flags[4] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--kernel") == 0) {
-      flags[5] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--os") == 0) {
-      flags[6] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--shell") == 0) {
-      flags[7] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--help") == 0) {
-      flags[8] = 1;
-    } else if (strcmp(argv[i], "--uptime") == 0) {
-      flags[9] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--colors") == 0) {
-      flags[10] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--wm") == 0) {
-      flags[11] = 1;
-      output_lines++;
-    } else if (strcmp(argv[i], "--user") == 0) {
-      flags[12] = 1;
+  if (argc > 1) {
+    for (int i = 1; i < argc; i++) {
       output_lines++;
     }
-  }
-
-  if (output_lines == 0) {
-    output_lines = 5;
-  }
-
-  int empty_lines = (terminal_height - output_lines) / 2;
-
-  for (int i = 0; i < empty_lines; i++) {
-    printf("\n");
-  }
-
-  if (!flags[0] && !flags[1] && !flags[2] && !flags[3] && !flags[4] &&
-      !flags[5] && !flags[6] && !flags[7] && !flags[8] && !flags[9] &&
-      !flags[10] && !flags[11] && !flags[12]) {
-    // print_info("Hi,", get_current_username(), &max_width);
+    empty_lines = (terminal_height - output_lines) / 2;
+    for (int i = 0; i < empty_lines; i++) {
+      printf("\n");
+    }
+  } else {
+    output_lines = 8;
+    empty_lines = (terminal_height - output_lines) / 2;
+    for (int i = 0; i < empty_lines; i++) {
+      printf("\n");
+    }
     print_info("Kernel", sys_info.kernel, &max_width);
     print_info("Hostname", sys_info.device_name, &max_width);
     print_window_manager(&max_width);
     print_info("Shell", sys_info.shell, &max_width);
     print_uptime_info(uptime, &max_width);
     print_centered_squares();
-  } else {
-    if (flags[0])
+  }
+
+  for (int i = 0; i < argc; i++) {
+    if (strcmp(argv[i], "--cpu") == 0) {
       print_info("CPU", cpu_info.model, &max_width);
-    if (flags[1])
+    } else if (strcmp(argv[i], "--ram") == 0) {
       print_memory_info("RAM", used_memory, full_memory, &max_width);
-    if (flags[2])
+    } else if (strcmp(argv[i], "--gpu") == 0) {
       print_info("GPU", gpu_model, &max_width);
-    if (flags[3])
+    } else if (strcmp(argv[i], "--disk") == 0) {
       print_disk_info(&info, &max_width);
-    if (flags[4])
+    } else if (strcmp(argv[i], "--host") == 0) {
       print_info("Hostname", sys_info.device_name, &max_width);
-    if (flags[5])
+    } else if (strcmp(argv[i], "--kernel") == 0) {
       print_info("Kernel", sys_info.kernel, &max_width);
-    if (flags[6])
+    } else if (strcmp(argv[i], "--os") == 0) {
       print_os(&max_width);
-    if (flags[7])
+    } else if (strcmp(argv[i], "--shell") == 0) {
       print_info("Shell", sys_info.shell, &max_width);
-    if (flags[9])
+    } else if (strcmp(argv[i], "--uptime") == 0) {
       print_uptime_info(uptime, &max_width);
-    if (flags[8])
-      print_usage(argv[0], &max_width);
-    if (flags[11])
-      print_window_manager(&max_width);
-    if (flags[12])
-      print_info("Hi,", get_current_username(), &max_width);
-    if (flags[10]) {
+    } else if (strcmp(argv[i], "--colors") == 0) {
       print_centered_squares();
+    } else if (strcmp(argv[i], "--wm") == 0) {
+      print_window_manager(&max_width);
+    } else if (strcmp(argv[i], "--user") == 0) {
+      char *username = get_current_username();
+      print_info("Hi, ", username, &max_width);
     }
   }
 
-  for (int i = 2; i < empty_lines; i++) {
+  for (int i = 0; i < empty_lines; i++) {
     printf("\n");
   }
 
