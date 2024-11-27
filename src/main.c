@@ -256,7 +256,7 @@ int main(int argc, char *argv[]) {
   int output_lines = 0;
   int empty_lines = 0;
 
-  if (argc > 2) {
+  if (argc > 1) {
     for (int i = 1; i < argc; i++) {
       output_lines++;
     }
@@ -279,31 +279,35 @@ int main(int argc, char *argv[]) {
   }
 
   for (int i = 0; i < argc; i++) {
-    if (strcmp(argv[i], "--cpu") == 0) {
-      print_info("CPU", cpu_info.model, &max_width);
-    } else if (strcmp(argv[i], "--ram") == 0) {
-      print_memory_info("RAM", used_memory, full_memory, &max_width);
-    } else if (strcmp(argv[i], "--gpu") == 0) {
-      print_info("GPU", gpu_model, &max_width);
-    } else if (strcmp(argv[i], "--disk") == 0) {
-      print_disk_info(&info, &max_width);
-    } else if (strcmp(argv[i], "--host") == 0) {
-      print_info("Hostname", sys_info.device_name, &max_width);
-    } else if (strcmp(argv[i], "--kernel") == 0) {
-      print_info("Kernel", sys_info.kernel, &max_width);
-    } else if (strcmp(argv[i], "--os") == 0) {
-      print_os(&max_width);
-    } else if (strcmp(argv[i], "--shell") == 0) {
-      print_info("Shell", sys_info.shell, &max_width);
-    } else if (strcmp(argv[i], "--uptime") == 0) {
-      print_uptime_info(uptime, &max_width);
-    } else if (strcmp(argv[i], "--colors") == 0) {
-      print_centered_squares();
-    } else if (strcmp(argv[i], "--wm") == 0) {
-      print_window_manager(&max_width);
-    } else if (strcmp(argv[i], "--user") == 0) {
-      char *username = get_current_username();
-      print_info("Hi, ", username, &max_width);
+    if (strcmp(argv[i], "--help") == 0) {
+      print_usage("nfetch", &max_width);
+    } else {
+      if (strcmp(argv[i], "--cpu") == 0) {
+        print_info("CPU", cpu_info.model, &max_width);
+      } else if (strcmp(argv[i], "--ram") == 0) {
+        print_memory_info("RAM", used_memory, full_memory, &max_width);
+      } else if (strcmp(argv[i], "--gpu") == 0) {
+        print_info("GPU", gpu_model, &max_width);
+      } else if (strcmp(argv[i], "--disk") == 0) {
+        print_disk_info(&info, &max_width);
+      } else if (strcmp(argv[i], "--host") == 0) {
+        print_info("Hostname", sys_info.device_name, &max_width);
+      } else if (strcmp(argv[i], "--kernel") == 0) {
+        print_info("Kernel", sys_info.kernel, &max_width);
+      } else if (strcmp(argv[i], "--os") == 0) {
+        print_os(&max_width);
+      } else if (strcmp(argv[i], "--shell") == 0) {
+        print_info("Shell", sys_info.shell, &max_width);
+      } else if (strcmp(argv[i], "--uptime") == 0) {
+        print_uptime_info(uptime, &max_width);
+      } else if (strcmp(argv[i], "--colors") == 0) {
+        print_centered_squares();
+      } else if (strcmp(argv[i], "--wm") == 0) {
+        print_window_manager(&max_width);
+      } else if (strcmp(argv[i], "--user") == 0) {
+        char *username = get_current_username();
+        print_info("Hi, ", username, &max_width);
+      }
     }
   }
 
