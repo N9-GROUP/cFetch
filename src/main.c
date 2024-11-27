@@ -32,8 +32,7 @@
 #define CYAN "\033[0;36m"
 #define WHITE "\033[0;37m"
 
-void wait_for_keypress()
-{
+void wait_for_keypress() {
 #ifdef _WIN32
   _getch();
 #else
@@ -43,14 +42,12 @@ void wait_for_keypress()
 #endif
 }
 
-void reset_term()
-{
+void reset_term() {
   printf("\033[?1049l");
   printf("\033[?25h");
 }
 
-void clear_terminal()
-{
+void clear_terminal() {
 #ifdef _WIN32
   system("cls");
 #else
@@ -59,8 +56,7 @@ void clear_terminal()
 #endif
 }
 
-void print_centered(const char *str)
-{
+void print_centered(const char *str) {
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   int width = w.ws_col;
@@ -70,11 +66,9 @@ void print_centered(const char *str)
   printf("%*s%s\n", offset, "", str);
 }
 
-char *create_repeated_string(char character, int count)
-{
+char *create_repeated_string(char character, int count) {
   char *result = (char *)malloc((count + 1) * sizeof(char));
-  if (result == NULL)
-  {
+  if (result == NULL) {
     printf("Memory error\n");
     return NULL;
   }
@@ -83,8 +77,7 @@ char *create_repeated_string(char character, int count)
   return result;
 }
 
-void print_centered_squares()
-{
+void print_centered_squares() {
   const char *squares = WHITE_BG
       "    " RESET_BG RED_BG "    " RESET_BG GREEN_BG "    " RESET_BG YELLOW_BG
       "    " RESET_BG BLUE_BG "    " RESET_BG MAGENTA_BG "    " RESET_BG CYAN_BG
@@ -99,8 +92,7 @@ void print_centered_squares()
   printf("\n%*s%s\n", offset, "", squares);
 }
 
-void print_info(const char *label, const char *value, int *max_width)
-{
+void print_info(const char *label, const char *value, int *max_width) {
   char buffer[100];
   const char *color;
   const char *icon;
@@ -113,69 +105,45 @@ void print_info(const char *label, const char *value, int *max_width)
 
   // printf(WHITE "│ ");
 
-  if (strstr(label, "Usage"))
-  {
+  if (strstr(label, "Usage")) {
     label = "";
     color = MAGENTA;
     icon = "";
     spacer = "";
 
     printf(color, icon, label, WHITE, value, RESET);
-  }
-  else
-  {
-    if (strstr(label, "CPU"))
-    {
+  } else {
+    if (strstr(label, "CPU")) {
       color = MAGENTA;
       icon = " ";
-    }
-    else if (strstr(label, "RAM"))
-    {
+    } else if (strstr(label, "RAM")) {
       color = MAGENTA;
       icon = "󰍛 ";
-    }
-    else if (strstr(label, "Disk"))
-    {
+    } else if (strstr(label, "Disk")) {
       color = MAGENTA;
       icon = " ";
-    }
-    else if (strstr(label, "Kernel"))
-    {
+    } else if (strstr(label, "Kernel")) {
       color = MAGENTA;
       icon = " ";
-    }
-    else if (strstr(label, "GPU"))
-    {
+    } else if (strstr(label, "GPU")) {
       color = MAGENTA;
       icon = " ";
-    }
-    else if (strstr(label, "Uptime"))
-    {
+    } else if (strstr(label, "Uptime")) {
       color = MAGENTA;
       icon = " ";
-    }
-    else if (strstr(label, "OS"))
-    {
+    } else if (strstr(label, "OS")) {
       color = MAGENTA;
       icon = " ";
-    }
-    else if (strstr(label, "Host"))
-    {
+    } else if (strstr(label, "Host")) {
       color = MAGENTA;
       icon = "󰏔 ";
-    }
-    else if (strstr(label, "Shell"))
-    {
+    } else if (strstr(label, "Shell")) {
       color = MAGENTA;
       icon = " ";
-    }
-    else if (strstr(label, "WM"))
-    {
+    } else if (strstr(label, "WM")) {
       color = MAGENTA;
       icon = " ";
-    }
-    else
-    {
+    } else {
       color = RESET;
     }
 
@@ -190,56 +158,47 @@ void print_info(const char *label, const char *value, int *max_width)
 
     int current_width = strlen(buffer);
 
-    if (current_width > *max_width)
-    {
+    if (current_width > *max_width) {
       *max_width = current_width;
     }
   }
 }
 
 void print_memory_info(const char *label, int used_memory, int full_memory,
-                       int *max_width)
-{
+                       int *max_width) {
   char buffer[100];
   snprintf(buffer, sizeof(buffer), "%.2f GB of %.2f GB",
            (float)used_memory / 1024, (float)full_memory / 1024);
   print_info(label, buffer, max_width);
 }
 
-void print_disk_info(disk_info_t *info, int *max_width)
-{
-  if (get_disk_info("/", info) == 0)
-  {
+void print_disk_info(disk_info_t *info, int *max_width) {
+  if (get_disk_info("/", info) == 0) {
     char buffer[100];
     snprintf(buffer, sizeof(buffer), "Used: %-1llu GB, Total: %-1llu GB",
              info->used_space / (1024 * 1024 * 1024),
              info->total_space / (1024 * 1024 * 1024));
     print_info("Disk", buffer, max_width);
-  }
-  else
-  {
+  } else {
     printf("Failed to get disk information.\n");
   }
 }
 
-void print_uptime_info(uptime_t uptime, int *max_width)
-{
+void print_uptime_info(uptime_t uptime, int *max_width) {
   char buffer[100];
   snprintf(buffer, sizeof(buffer), "%-1dd %-1dh %-1dm", uptime.days,
            uptime.hours, uptime.minutes);
   print_info("Uptime", buffer, max_width);
 }
 
-void print_window_manager(int *max_width)
-{
+void print_window_manager(int *max_width) {
   char buffer[100];
   const char *wm =
       getenv("DESKTOP_SESSION") ? getenv("DESKTOP_SESSION") : "Unknown";
   print_info("WM", wm, max_width);
 }
 
-void print_usage(const char *program_name, int *max_width)
-{
+void print_usage(const char *program_name, int *max_width) {
   printf(RED "   ▄   ▄████  ▄███▄     ▄▄▄▄▀ ▄█▄     ▄  █ \n");
   printf("    █  █▀   ▀ █▀   ▀ ▀▀▀ █    █▀ ▀▄  █   █ \n");
   printf("██   █ █▀▀    ██▄▄       █    █   ▀  ██▀▀█ \n");
@@ -251,24 +210,20 @@ void print_usage(const char *program_name, int *max_width)
                 "os --shell --uptime --colors --wm --user\n");
 }
 
-void print_os(int *max_width)
-{
+void print_os(int *max_width) {
   FILE *os_file = fopen("/etc/os-release", "r");
   char buffer[100];
   char os_name[100] = "Unknown OS";
   size_t linecap = 0;
   char *line = NULL;
 
-  if (!os_file)
-  {
+  if (!os_file) {
     perror("Failed to open /etc/os-release");
     return;
   }
 
-  while (getline(&line, &linecap, os_file) != -1)
-  {
-    if (strncmp(line, "PRETTY_NAME=", 12) == 0)
-    {
+  while (getline(&line, &linecap, os_file) != -1) {
+    if (strncmp(line, "PRETTY_NAME=", 12) == 0) {
       snprintf(os_name, sizeof(os_name), "%s", line + 13);
       os_name[strcspn(os_name, "\"")] = '\0';
       break;
@@ -281,8 +236,7 @@ void print_os(int *max_width)
   print_info("OS", os_name, max_width);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   clear_terminal();
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
@@ -300,80 +254,22 @@ int main(int argc, char *argv[])
 
   int max_width = 0;
   int output_lines = 0;
+  int empty_lines = 0;
 
-  for (int i = 1; i < argc; i++)
-  {
-    if (strcmp(argv[i], "--cpu") == 0)
-    {
-      print_info("CPU", cpu_info.model, &max_width);
+  if (argc > 1) {
+    for (int i = 1; i < argc; i++) {
       output_lines++;
     }
-    else if (strcmp(argv[i], "--ram") == 0)
-    {
-      print_memory_info("RAM", used_memory, full_memory, &max_width);
-      output_lines++;
+    empty_lines = (terminal_height - output_lines) / 2;
+    for (int i = 0; i < empty_lines; i++) {
+      printf("\n");
     }
-    else if (strcmp(argv[i], "--gpu") == 0)
-    {
-      print_info("GPU", gpu_model, &max_width);
-      output_lines++;
+  } else {
+    output_lines = 6;
+    empty_lines = (terminal_height - output_lines) / 2;
+    for (int i = 0; i < empty_lines; i++) {
+      printf("\n");
     }
-    else if (strcmp(argv[i], "--disk") == 0)
-    {
-      print_disk_info(&info, &max_width);
-      output_lines++;
-    }
-    else if (strcmp(argv[i], "--host") == 0)
-    {
-      print_info("Hostname", sys_info.device_name, &max_width);
-      output_lines++;
-    }
-    else if (strcmp(argv[i], "--kernel") == 0)
-    {
-      print_info("Kernel", sys_info.kernel, &max_width);
-      output_lines++;
-    }
-    else if (strcmp(argv[i], "--os") == 0)
-    {
-      print_os(&max_width);
-      output_lines++;
-    }
-    else if (strcmp(argv[i], "--shell") == 0)
-    {
-      print_info("Shell", sys_info.shell, &max_width);
-      output_lines++;
-    }
-    else if (strcmp(argv[i], "--help") == 0)
-    {
-      print_usage(argv[0], &max_width);
-      output_lines += 20;
-    }
-    else if (strcmp(argv[i], "--uptime") == 0)
-    {
-      print_uptime_info(uptime, &max_width);
-      output_lines++;
-    }
-    else if (strcmp(argv[i], "--colors") == 0)
-    {
-      print_centered_squares();
-      output_lines++;
-    }
-    else if (strcmp(argv[i], "--wm") == 0)
-    {
-      print_window_manager(&max_width);
-      output_lines++;
-    }
-    else if (strcmp(argv[i], "--user") == 0)
-    {
-      print_info("Hi,", get_current_username(), &max_width);
-      output_lines++;
-    }
-  }
-
-  if (output_lines == 0)
-  {
-    output_lines = 5;
-    print_info("Hi,", get_current_username(), &max_width);
     print_info("Kernel", sys_info.kernel, &max_width);
     print_info("Hostname", sys_info.device_name, &max_width);
     print_window_manager(&max_width);
@@ -382,68 +278,36 @@ int main(int argc, char *argv[])
     print_centered_squares();
   }
 
-  int empty_lines = (terminal_height - output_lines) / 2;
-
-  for (int i = 0; i < empty_lines; i++)
-  {
-    printf("\n");
-  }
-
-  for (int i = 0; i < argc; i++)
-  {
-    if (strcmp(argv[i], "--cpu") == 0)
-    {
+  for (int i = 0; i < argc; i++) {
+    if (strcmp(argv[i], "--cpu") == 0) {
       print_info("CPU", cpu_info.model, &max_width);
-    }
-    else if (strcmp(argv[i], "--ram") == 0)
-    {
+    } else if (strcmp(argv[i], "--ram") == 0) {
       print_memory_info("RAM", used_memory, full_memory, &max_width);
-    }
-    else if (strcmp(argv[i], "--gpu") == 0)
-    {
+    } else if (strcmp(argv[i], "--gpu") == 0) {
       print_info("GPU", gpu_model, &max_width);
-    }
-    else if (strcmp(argv[i], "--disk") == 0)
-    {
+    } else if (strcmp(argv[i], "--disk") == 0) {
       print_disk_info(&info, &max_width);
-    }
-    else if (strcmp(argv[i], "--host") == 0)
-    {
+    } else if (strcmp(argv[i], "--host") == 0) {
       print_info("Hostname", sys_info.device_name, &max_width);
-    }
-    else if (strcmp(argv[i], "--kernel") == 0)
-    {
+    } else if (strcmp(argv[i], "--kernel") == 0) {
       print_info("Kernel", sys_info.kernel, &max_width);
-    }
-    else if (strcmp(argv[i], "--os") == 0)
-    {
+    } else if (strcmp(argv[i], "--os") == 0) {
       print_os(&max_width);
-    }
-    else if (strcmp(argv[i], "--shell") == 0)
-    {
+    } else if (strcmp(argv[i], "--shell") == 0) {
       print_info("Shell", sys_info.shell, &max_width);
-    }
-    else if (strcmp(argv[i], "--uptime") == 0)
-    {
+    } else if (strcmp(argv[i], "--uptime") == 0) {
       print_uptime_info(uptime, &max_width);
-    }
-    else if (strcmp(argv[i], "--colors") == 0)
-    {
+    } else if (strcmp(argv[i], "--colors") == 0) {
       print_centered_squares();
-    }
-    else if (strcmp(argv[i], "--wm") == 0)
-    {
+    } else if (strcmp(argv[i], "--wm") == 0) {
       print_window_manager(&max_width);
-    }
-    else if (strcmp(argv[i], "--user") == 0)
-    {
+    } else if (strcmp(argv[i], "--user") == 0) {
       char *username = get_current_username();
       print_info("Hi, ", username, &max_width);
     }
   }
 
-  for (int i = 0; i < empty_lines; i++)
-  {
+  for (int i = 0; i < empty_lines; i++) {
     printf("\n");
   }
 
