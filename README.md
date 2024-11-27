@@ -1,6 +1,6 @@
 <div align="center">
     <h1>🌿 nFetch</h1>
-    <img src="imgs/1.png" />
+<img src="https://github.com/user-attachments/assets/3573f2d4-7909-41bd-98c9-31dc0ae6eea8"/>
     <h3>🌆 A simple fetch tool for Linux written in C</h3>
     <br>
     <a href="./LICENSE.md"><img  class="badge" src="https://img.shields.io/github/license/Nighty3098/nFetch?style=for-the-badge&color=a6e0b8&logoColor=ffffff&labelColor=1c1c29"  style="border-radius: 5px;"/></a>
@@ -28,10 +28,10 @@ nfetch
 
 <div align="center">
     <h3>Images</h3>
-    <br>
-    <img src="imgs/2.png" />
-    <br>
-    <img src="imgs/3.png" />
-    <br>
-    <img src="imgs/4.png" />
+
+
+<img src="https://github.com/user-attachments/assets/e56f3088-aa77-422d-8897-545663e596a4"/>
+<img src="https://github.com/user-attachments/assets/69c368ad-82fb-403c-90ba-c4ae196ba22a"/>
+<img src="https://github.com/user-attachments/assets/14950b17-0836-44a7-9c4e-b1f2b4364651"/>
+
 </div>
