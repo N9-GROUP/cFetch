@@ -256,7 +256,7 @@ int main(int argc, char *argv[]) {
   int output_lines = 0;
   int empty_lines = 0;
 
-  if (argc > 1) {
+  if (argc > 2) {
     for (int i = 1; i < argc; i++) {
       output_lines++;
     }
@@ -265,7 +265,7 @@ int main(int argc, char *argv[]) {
       printf("\n");
     }
   } else {
-    output_lines = 8;
+    output_lines += 8;
     empty_lines = (terminal_height - output_lines) / 2;
     for (int i = 0; i < empty_lines; i++) {
       printf("\n");
