@@ -344,7 +344,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  for (int i = 0; i < empty_lines; i++) {
+  for (int i = 2; i < empty_lines; i++) {
     printf("\n");
   }
 
