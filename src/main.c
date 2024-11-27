@@ -265,7 +265,7 @@ int main(int argc, char *argv[]) {
       printf("\n");
     }
   } else {
-    output_lines = 6;
+    output_lines = 8;
     empty_lines = (terminal_height - output_lines) / 2;
     for (int i = 0; i < empty_lines; i++) {
       printf("\n");
