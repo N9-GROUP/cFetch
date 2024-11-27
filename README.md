@@ -1,6 +1,6 @@
 <div align="center">
     <h1>🌿 nFetch</h1>
-    <img src="imgs/2.png" />
+    <img src="imgs/1.png" />
     <h3>🌆 A simple fetch tool for Linux written in C</h3>
     <br>
     <a href="./LICENSE.md"><img  class="badge" src="https://img.shields.io/github/license/Nighty3098/nFetch?style=for-the-badge&color=a6e0b8&logoColor=ffffff&labelColor=1c1c29"  style="border-radius: 5px;"/></a>
@@ -29,7 +29,7 @@ nfetch
 <div align="center">
     <h3>Images</h3>
     <br>
-    <img src="imgs/1.png" />
+    <img src="imgs/2.png" />
     <br>
     <img src="imgs/3.png" />
 </div>
