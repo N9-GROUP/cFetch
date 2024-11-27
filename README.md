@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>🌿 cFetch</h1>
+    <h1>🌿 nFetch</h1>
     <img src="imgs/2.png" />
     <h3>🌆 A simple fetch tool for Linux written in C</h3>
     <br>

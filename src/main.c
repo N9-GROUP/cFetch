@@ -38,6 +38,8 @@ void wait_for_keypress()
   _getch();
 #else
   getchar();
+  printf("\033[?1049l");
+  printf("\033[?25h");
 #endif
 }
 
@@ -46,7 +48,8 @@ void clear_terminal()
 #ifdef _WIN32
   system("cls");
 #else
-  system("clear");
+  printf("\033[?1049h");
+  printf("\033[?25l");
 #endif
 }
 

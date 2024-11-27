@@ -59,6 +59,7 @@
   "files.associations": {
     "disk_info.h": "c",
     "functional": "c",
-    "user_name.h": "c"
+    "user_name.h": "c",
+    "get_ram.h": "c"
   }
 }
